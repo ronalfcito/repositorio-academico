@@ -1,50 +1,60 @@
 import { neon } from '@neondatabase/serverless';
 
 export default async function handler(req, res) {
-
-  const sql = neon(process.env.DATABASE_URL);
+  if (req.method !== 'POST') {
+    return res.status(405).json({
+      error: 'Método no permitido'
+    });
+  }
 
   const {
     semana,
     titulo,
     subtitulo,
     contenido,
+    fecha,
     categoria,
-    seccion
+    seccion,
+    pdf_url
   } = req.body;
 
-  try {
+  const sql = neon(process.env.DATABASE_URL);
 
+  try {
     await sql`
-      INSERT INTO apuntes(
+      INSERT INTO apuntes (
         semana,
         titulo,
         subtitulo,
         contenido,
         fecha,
         categoria,
-        seccion
+        seccion,
+        pdf_url
       )
-      VALUES(
+      VALUES (
         ${semana},
         ${titulo},
         ${subtitulo},
         ${contenido},
-        CURRENT_DATE,
+        ${fecha},
         ${categoria},
-        ${seccion}
+        ${seccion},
+        ${pdf_url || null}
       )
     `;
 
-    res.status(200).json({
-      success: true
+    return res.status(200).json({
+      success: true,
+      message: 'Apunte publicado correctamente'
     });
 
   } catch (error) {
+    console.error(error);
 
-    res.status(500).json({
+    return res.status(500).json({
+      success: false,
       error: error.message
     });
-
   }
 }

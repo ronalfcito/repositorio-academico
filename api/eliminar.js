@@ -1,27 +1,33 @@
 import { neon } from '@neondatabase/serverless';
 
-export default async function handler(req, res) {
+export default async function handler(request, response) {
 
-  const sql = neon(process.env.DATABASE_URL);
+    if (request.method !== 'DELETE') {
+        return response.status(405).json({
+            error: 'Método no permitido'
+        });
+    }
 
-  const { id } = req.body;
+    const { id } = request.body;
 
-  try {
+    const sql = neon(process.env.DATABASE_URL);
 
-    await sql`
-      DELETE FROM apuntes
-      WHERE id = ${id}
-    `;
+    try {
 
-    res.status(200).json({
-      success: true
-    });
+        await sql`
+            DELETE FROM apuntes
+            WHERE id = ${id}
+        `;
 
-  } catch (error) {
+        return response.status(200).json({
+            success: true
+        });
 
-    res.status(500).json({
-      error: error.message
-    });
+    } catch (error) {
 
-  }
+        return response.status(500).json({
+            error: error.message
+        });
+
+    }
 }

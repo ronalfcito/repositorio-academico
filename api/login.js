@@ -1,35 +1,39 @@
 import { neon } from '@neondatabase/serverless';
 
-export default async function handler(req, res) {
-
-  const sql = neon(process.env.DATABASE_URL);
-
-  const { username, password } = req.body;
-
-  try {
-
-    const usuario = await sql`
-      SELECT *
-      FROM usuarios
-      WHERE username = ${username}
-      AND password = ${password}
-    `;
-
-    if (usuario.length > 0) {
-      return res.status(200).json({
-        success: true
-      });
+export default async function handler(request, response) {
+    if (request.method !== 'POST') {
+        return response.status(405).json({
+            error: 'Método no permitido'
+        });
     }
 
-    return res.status(401).json({
-      success: false
-    });
+    const { username, password } = request.body;
 
-  } catch (error) {
+    const sql = neon(process.env.DATABASE_URL);
 
-    return res.status(500).json({
-      error: error.message
-    });
+    try {
+        const user = await sql`
+            SELECT *
+            FROM usuarios
+            WHERE username = ${username}
+            AND password = ${password}
+        `;
 
-  }
+        if (user.length > 0) {
+            return response.status(200).json({
+                success: true,
+                message: 'Login correcto'
+            });
+        } else {
+            return response.status(401).json({
+                success: false,
+                message: 'Usuario o contraseña incorrectos'
+            });
+        }
+
+    } catch (error) {
+        return response.status(500).json({
+            error: error.message
+        });
+    }
 }

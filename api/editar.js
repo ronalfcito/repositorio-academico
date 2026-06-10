@@ -2,28 +2,61 @@ import { neon } from '@neondatabase/serverless';
 
 export default async function handler(req, res) {
 
-  const sql = neon(process.env.DATABASE_URL);
+    if (req.method !== 'PUT') {
+        return res.status(405).json({
+            success: false,
+            error: 'Método no permitido'
+        });
+    }
 
-  const { id, titulo, contenido } = req.body;
+    try {
 
-  try {
+        let body = req.body;
 
-    await sql`
-      UPDATE apuntes
-      SET titulo = ${titulo},
-          contenido = ${contenido}
-      WHERE id = ${id}
-    `;
+        if (typeof body === 'string') {
+            body = JSON.parse(body);
+        }
 
-    res.status(200).json({
-      success: true
-    });
+        const {
+            id,
+            semana,
+            titulo,
+            subtitulo,
+            contenido,
+            fecha,
+            categoria,
+            seccion,
+            pdf_url
+        } = body;
 
-  } catch (error) {
+        const sql = neon(process.env.DATABASE_URL);
 
-    res.status(500).json({
-      error: error.message
-    });
+        await sql`
+            UPDATE apuntes
+            SET
+                semana = ${semana},
+                titulo = ${titulo},
+                subtitulo = ${subtitulo},
+                contenido = ${contenido},
+                fecha = ${fecha},
+                categoria = ${categoria},
+                seccion = ${seccion},
+                pdf_url = ${pdf_url || null}
+            WHERE id = ${id}
+        `;
 
-  }
+        return res.status(200).json({
+            success: true,
+            message: 'Apunte actualizado correctamente'
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
 }
