@@ -1,0 +1,397 @@
+/* ==========================================================================
+   VARIABLES, COLORES Y REGLAS GENERALES (ACTUALIZADO)
+   ========================================================================== */
+:root {
+    --bg-dark: #0B131F;        /* Cambiado: Fondo oscuro profundo de la app */
+    --card-bg: #152232;        /* Cambiado: Fondo de tarjetas para que resalten */
+    --sidebar-bg: #111D2B;     /* Cambiado: Tono sutilmente distinto para la barra lateral */
+    --text-white: #ffffff;
+    --text-gray: #8CA0B3;      /* Cambiado: Gris azulado limpio para textos secundarios */
+    --accent-green: #00E676;   /* Cambiado: Verde esmeralda brillante/neón idéntico a la imagen */
+    --border-green: rgba(0, 230, 118, 0.25); /* Cambiado: Borde translúcido para el efecto destello */
+    --orange-accent: #e57c48;
+    --edit-orange: #e67e22; 
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   NAVBAR & LOGO (OPTIMIZADO)
+   ========================================================================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #080D16; /* Cambiado: Más oscuro para contrastar con el fondo general */
+    padding: 15px 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-sub { font-size: 11px; color: var(--text-gray); margin: 0; }
+.logo-main { font-size: 22px; margin: 0; font-weight: bold; letter-spacing: 1px; }
+.nav-links { display: flex; gap: 20px; }
+.nav-links a { color: var(--text-gray); text-decoration: none; font-size: 14px; padding: 8px 16px; border-radius: 20px; transition: background 0.2s, color 0.2s; }
+
+/* Estado activo redondeado, fondo opaco y texto brillante como en la captura */
+.nav-links a.active { 
+    background-color: rgba(0, 230, 118, 0.1); 
+    color: var(--accent-green); 
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   PERFIL DE USUARIO & DROPDOWN
+   ========================================================================== */
+.user-profile { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    position: relative; 
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.user-profile:hover {
+    background-color: #15222f;
+}
+.avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+.arrow { font-size: 11px; color: var(--text-gray); transition: 0.2s; }
+.notification { font-size: 16px; margin-left: 5px; }
+
+.dropdown-menu {
+    display: none; 
+    position: absolute;
+    top: 50px; 
+    right: 0;
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-green); 
+    border-radius: 12px;
+    width: 290px;
+    padding: 18px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    cursor: default; 
+}
+.menu-title {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    color: var(--accent-green);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.dropdown-menu input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--bg-dark);
+    border: 1px solid #283a4e;
+    color: var(--text-white);
+    border-radius: 6px;
+    font-size: 13px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+.dropdown-menu input:focus {
+    border-color: var(--accent-green);
+    outline: none;
+}
+
+/* ==========================================================================
+   BOTONES GLOBALES
+   ========================================================================== */
+.btn-menu-action {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--orange-accent); 
+    border: none;
+    color: var(--text-white);
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+.btn-menu-action:hover {
+    background-color: #d46b37;
+}
+.btn-green {
+    background-color: rgba(0, 230, 118, 0.15);
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green);
+}
+.btn-green:hover {
+    background-color: var(--accent-green);
+    color: var(--bg-dark);
+}
+.btn-logout-link {
+    background: transparent;
+    border: none;
+    color: #ff5252;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+}
+.btn-logout-link:hover {
+    text-decoration: underline;
+}
+.btn-regresar {
+    background: transparent;
+    border: 1px solid var(--orange-accent);
+    color: var(--orange-accent);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.btn-regresar:hover {
+    background-color: var(--orange-accent);
+    color: #ffffff;
+}
+
+.btn-cancelar {
+    border: 1px solid #ef4444 !important;
+    color: #ef4444 !important;
+    background: transparent !important;
+}
+.btn-cancelar:hover {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+}
+
+#btn-editar-dashboard,
+#btn-editar-lectura {
+    background: transparent;
+    border: 1px solid var(--edit-orange);
+    color: var(--edit-orange);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+#btn-editar-dashboard:hover,
+#btn-editar-lectura:hover {
+    background-color: var(--edit-orange);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(230, 126, 34, 0.4);
+}
+
+/* ==========================================================================
+   DASHBOARD PRINCIPAL (GRID - EFECTOS GLOW Y SOMBRAS)
+   ========================================================================== */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    padding: 40px;
+    flex-grow: 1;
+    align-items: flex-start;
+}
+.main-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-green); /* Cambiado: Borde fino y brillante */
+    border-radius: 16px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); /* Añadido: Elevación tridimensional */
+}
+
+/* Badge de Bienvenida estilo píldora translúcida */
+.badge {
+    background-color: rgba(0, 230, 118, 0.12); /* Cambiado: Fondo suave */
+    color: #00C853;                           /* Cambiado: Verde puro nítido */
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    width: fit-content;
+}
+.card-title { font-size: 32px; margin: 0; font-weight: 700; }
+.card-subtitle { color: var(--text-gray); font-size: 18px; margin: 0; font-weight: 400; }
+.card-text { color: #A0B3C6; line-height: 1.6; font-size: 15px; margin: 0; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+.date { color: var(--text-gray); font-size: 14px; }
+
+.btn-consultar {
+    background: transparent;
+    border: 1px solid var(--orange-accent);
+    color: var(--orange-accent);
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.btn-consultar:hover { background: var(--orange-accent); color: white; }
+
+/* BARRA LATERAL (SIDEBAR INTERACTIVA) */
+.sidebar {
+    background-color: var(--sidebar-bg);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+    overflow: hidden; /* Cambiado: Evita que la marca de agua deforme la caja */
+    flex-shrink: 0;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: #283a4e; border-radius: 10px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: var(--border-green); }
+
+.sidebar-item {
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s;
+    position: relative;
+    z-index: 1; /* Pone los artículos por delante de la marca de agua */
+}
+.sidebar-item:hover { background-color: rgba(255, 255, 255, 0.03); }
+.sidebar-item.active { 
+    background-color: rgba(0, 230, 118, 0.05); 
+    border-left: 4px solid var(--accent-green);
+}
+.sidebar-item h3 { font-size: 15px; margin: 0 0 5px 0; color: #fff; }
+.sidebar-item p { font-size: 13px; margin: 0; color: var(--text-gray); }
+
+/* Marca de agua integrada idéntica al fondo de la imagen */
+.watermark-logo {
+    position: absolute;
+    bottom: 20px; 
+    right: -20px;     /* Desplazado sutilmente */
+    font-size: 75px; 
+    font-weight: 900; 
+    color: rgba(255, 255, 255, 0.03); /* Opacidad ultra baja perfecta */
+    letter-spacing: 2px;
+    z-index: 0; 
+    pointer-events: none;
+    user-select: none;
+}
+
+/* MISCELÁNEOS */
+.menu-divider { border: 0; border-top: 1px solid #283a4e; margin: 15px 0 10px 0; }
+.footer-credits { text-align: right; padding: 20px 40px; font-size: 12px; color: rgba(255, 255, 255, 0.15); letter-spacing: 0.5px; }
+
+/* ==========================================================================
+   VISTA LECTURA DE APUNTES
+   ========================================================================== */
+#vista-apunte-completo {
+    background-color: var(--bg-dark);
+    min-height: calc(100vh - 80px);
+    box-sizing: border-box;
+    padding-bottom: 40px;
+}
+.header-acciones-apunte {
+    max-width: 850px;
+    margin: 30px auto 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+.contenido-pagina-apunte {
+    max-width: 850px;
+    margin: 20px auto;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-green);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+}
+.apunte-gran-titulo { font-size: 36px; font-weight: 700; margin: 0 0 10px 0; color: var(--text-white); }
+.divisor-apunte { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin-bottom: 25px; }
+.apunte-parrafo { font-size: 15px; line-height: 1.7; color: #d1d5db; margin-bottom: 20px; }
+.apunte-subtitulo-h3 { font-size: 20px; color: var(--accent-green); margin: 30px 0 15px 0; font-weight: 600; }
+.apunte-item-lista { font-size: 15px; color: #d1d5db; margin-left: 20px; margin-bottom: 10px; list-style-type: square; }
+
+pre, code {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    color: var(--accent-green);
+    display: block;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.contenedor-cuadro-academico { margin: 25px 0; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-green); }
+.tabla-datos { width: 100%; border-collapse: collapse; background-color: #0f172a; font-size: 14px; text-align: left; margin-bottom: 25px; }
+.tabla-datos th { background-color: rgba(0, 230, 118, 0.1); color: var(--accent-green); padding: 12px; font-weight: 600; }
+.tabla-datos td { padding: 12px; color: var(--text-white); border-bottom: 1px solid #1e293b; }
+.tabla-datos tr:last-child td { border-bottom: none; }
+
+/* ==========================================================================
+   VISTA DE PUBLICACIÓN
+   ========================================================================== */
+#vista-publicar-completo { background-color: #0a0f16; min-height: calc(100vh - 80px); padding: 40px 20px; box-sizing: border-box; }
+.contenedor-formulario-grande { max-width: 850px; margin: 0 auto; background-color: #141c26; border: 1px solid var(--border-green); border-radius: 16px; padding: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); box-sizing: border-box; }
+.form-header { margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-start; }
+.form-header h2 { font-size: 24px; color: #fff; margin: 0 0 5px 0; }
+.form-header p { color: #94a3b8; font-size: 14px; margin: 0; }
+.grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group label { font-size: 11px; color: var(--accent-green); font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+.grid-form input, .grid-form select, .grid-form textarea { background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 12px; color: white; font-family: inherit; font-size: 14px; box-sizing: border-box; width: 100%; }
+.grid-form textarea { resize: vertical; line-height: 1.6; }
+.grid-form input:focus, .grid-form select:focus, .grid-form textarea:focus { border-color: var(--accent-green) !important; outline: none; box-shadow: 0 0 8px rgba(0, 223, 137, 0.2); }
+.col-span-2 { grid-column: span 2; }
+.form-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
+.btn-submit { background: linear-gradient(135deg, #1f5e49, var(--accent-green)); color: #020617; border: none; padding: 14px 35px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 14px; font-family: inherit; transition: transform 0.2s, box-shadow 0.2s; }
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 223, 137, 0.3); }
+
+/* ==========================================================================
+   ALINEACIÓN DE CABECERA Y BOTONES COMPACTOS DE ACCIÓN PDF
+   ========================================================================== */
+.meta-y-acciones { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+.apunte-gran-fecha { color: var(--text-gray); font-size: 14px; margin: 0 !important; }
+.botones-pdf-container { display: flex; gap: 12px; }
+.btn-pdf-action { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12px; font-weight: bold; border-radius: 6px; text-decoration: none; font-family: inherit; transition: all 0.2s ease; cursor: pointer; }
+
+.btn-visualizar { background-color: rgba(0, 230, 118, 0.1); border: 1px solid var(--border-green); color: var(--accent-green); }
+.btn-visualizar:hover { background-color: var(--accent-green); color: #0d161f; box-shadow: 0 0 12px rgba(0, 223, 137, 0.4); transform: translateY(-1px); }
+
+.btn-descargar { background-color: transparent; border: 1px solid var(--orange-accent); color: var(--orange-accent); }
+.btn-descargar:hover { background-color: var(--orange-accent); color: #ffffff; box-shadow: 0 0 12px rgba(229, 124, 72, 0.4); transform: translateY(-1px); }
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (SOPORTE PARA MÓVILES)
+   ========================================================================== */
+@media (max-width: 900px) {
+    .dashboard-container { grid-template-columns: 1fr; }
+    .navbar { padding: 15px 20px; flex-direction: column; gap: 15px; text-align: center; }
+    .grid-form { grid-template-columns: 1fr; }
+    .col-span-2 { grid-column: span 1; }
+    .sidebar { max-height: none; }
+    .meta-y-acciones { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .botones-pdf-container { width: 100%; }
+    .btn-pdf-action { flex-grow: 1; justify-content: center; }
+}
