@@ -22,7 +22,6 @@ export default async function handler(req, res) {
 
   try {
     console.log("FECHA original:", fecha);
-    console.log("FECHA SQL:", typeof fechaSQL);
 
     // Convertir fecha a formato YYYY-MM-DD
     let fechaSQL = fecha;
