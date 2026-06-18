@@ -17,7 +17,8 @@ body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-    background-image: url('imagenes/fondo.jpg');
+    background-image: url('/imagenes/fondo.jpg');
+    background-color: var(--bg-dark);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
