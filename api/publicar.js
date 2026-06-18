@@ -21,6 +21,8 @@ export default async function handler(req, res) {
   const sql = neon(process.env.DATABASE_URL);
 
   try {
+    console.log("FECHA RECIBIDA:", fecha);
+    console.log("TIPO:", typeof fecha);
 
     // Convertir fecha a formato YYYY-MM-DD
     let fechaSQL = fecha;
