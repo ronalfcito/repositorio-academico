@@ -363,8 +363,7 @@
 
         async function procesarPublicacion(event) {
             event.preventDefault();
-            const opciones = { day: '2-digit', month: 'long', year: 'numeric' };
-            const hoy = new Date().toLocaleDateString('es-ES', opciones);
+            const hoy = new Date().toISOString().split('T')[0];
             const idEditar = document.getElementById('pub-id-editar').value;
 
             const datosArticulo = {

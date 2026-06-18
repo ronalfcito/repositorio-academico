@@ -27,13 +27,30 @@ export default async function handler(req, res) {
     // Convertir fecha a formato YYYY-MM-DD
     let fechaSQL = fecha;
 
+    const spanishMonths = {
+      enero: '01', febrero: '02', marzo: '03', abril: '04',
+      mayo: '05', junio: '06', julio: '07', agosto: '08',
+      septiembre: '09', octubre: '10', noviembre: '11', diciembre: '12'
+    };
+
+    function parseSpanishDate(input) {
+      const regex = /^(\d{1,2})\s+de\s+([a-záéíóúñ]+)\s+de\s+(\d{4})$/i;
+      const match = String(input).trim().match(regex);
+      if (!match) return null;
+      const day = match[1].padStart(2, '0');
+      const month = spanishMonths[match[2].toLowerCase()];
+      const year = match[3];
+      return month ? `${year}-${month}-${day}` : null;
+    }
+
     if (fecha) {
       const fechaConvertida = new Date(fecha);
 
       if (!isNaN(fechaConvertida.getTime())) {
-        fechaSQL = fechaConvertida
-          .toISOString()
-          .split('T')[0];
+        fechaSQL = fechaConvertida.toISOString().split('T')[0];
+      } else {
+        const fechaParseada = parseSpanishDate(fecha);
+        if (fechaParseada) fechaSQL = fechaParseada;
       }
     }
 
