@@ -15,12 +15,19 @@
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif; /* Optimizado */
-    background: linear-gradient(
-        180deg,
-        #f8fafc 0%,
-        #eef2ff 100%
-    );                          /* Cambiado a gradiente luminoso moderno */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    background:
+        radial-gradient(circle at top left,
+        rgba(120,140,255,.12),
+        transparent 40%),
+
+        radial-gradient(circle at bottom right,
+        rgba(120,140,255,.15),
+        transparent 40%),
+
+        #f4f7fc;
+
     color: #1e293b;
     display: flex;
     flex-direction: column;
