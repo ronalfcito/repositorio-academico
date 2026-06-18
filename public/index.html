@@ -10,7 +10,7 @@
 
     <header class="navbar">
         <div class="logo">
-            <span class="logo-icon">🏛️</span>
+            <span class="logo-icon" style="font-size: 24px;">🏛️</span>
             <div>
                 <p class="logo-sub">Instituto Superior Tecnológico</p>
                 <h1 class="logo-main">REPOSITORIO ACADÉMICO</h1>
@@ -50,7 +50,7 @@
     <main class="dashboard-container" id="sitio-principal">
         <section class="main-card" id="main-card">
             <span class="badge" id="card-category">BIENVENIDO</span>
-            <h2 class="card-title" id="card-title">Repositorio Académico </h2>
+            <h2 class="card-title" id="card-title">Repositorio Académico</h2>
             <h3 class="card-subtitle" id="card-subtitle">Elige una asignatura arriba</h3>
             <p class="card-text" id="card-text">Bienvenido a tu plataforma de estudio. Haz clic en 'Arquitectura' o 'Calidad' en el menú de navegación superior para desplegar los apuntes cargados en tiempo real.</p>
             
@@ -58,7 +58,7 @@
                 <span class="date" id="card-date">Hoy</span>
                 <div style="display: flex; gap: 10px;">
                     <button id="btn-eliminar-dashboard" class="btn-regresar btn-cancelar" style="display: none;" onclick="eliminarArticuloActual()">🗑️ Eliminar</button>
-                    <button id="btn-editar-dashboard" class="btn-consultar" style="display: none; background-color: #e67e22;" onclick="cargarArticuloEnFormulario()">✏️ Editar</button>
+                    <button id="btn-editar-dashboard" class="btn-regresar" style="display: none;" onclick="cargarArticuloEnFormulario()">✏️ Editar</button>
                     <button class="btn-consultar" id="btn-consultar-trigger" style="display: none;" onclick="mostrarPaginaApunte()">CONSULTAR APUNTE ➔</button>
                 </div>
             </div>
@@ -66,7 +66,7 @@
 
         <aside class="sidebar">
             <div id="sidebar-list">
-                <p style="color: #8ca0b3; padding: 15px; font-size: 14px;">Selecciona una materia en el menú superior para ver sus artículos.</p>
+                <p style="color: var(--text-gray); padding: 15px; font-size: 14px;">Selecciona una materia en el menú superior para ver sus artículos.</p>
             </div>
             <div class="watermark-logo">YAVIRAC</div>
         </aside>
@@ -77,7 +77,7 @@
             <button class="btn-regresar" onclick="regresarAlDashboard()">← VOLVER AL LISTADO</button>
             <div style="display: flex; gap: 10px; align-items: center;">
                 <button id="btn-eliminar-lectura" class="btn-regresar btn-cancelar" style="display: none;" onclick="eliminarArticuloActual()">🗑️ Eliminar Semana</button>
-                <button id="btn-editar-lectura" class="btn-consultar" style="display: none; background-color: #e67e22; padding: 10px 15px;" onclick="cargarArticuloEnFormulario()">✏️ Editar Semana</button>
+                <button id="btn-editar-lectura" class="btn-regresar" style="display: none; padding: 10px 15px;" onclick="cargarArticuloEnFormulario()">✏️ Editar Semana</button>
                 <span class="badge" id="apunte-pagina-categoria">TEORÍA</span>
             </div>
         </div>
@@ -177,9 +177,9 @@
             seccionActual = seccion;
 
             if (seccion === 'inicio') {
-                document.getElementById('sidebar-list').innerHTML = `<p style="color: #8ca0b3; padding: 15px; font-size: 14px;">Selecciona una materia en el menú superior para ver sus artículos.</p>`;
+                document.getElementById('sidebar-list').innerHTML = `<p style="color: var(--text-gray); padding: 15px; font-size: 14px;">Selecciona una materia en el menú superior para ver sus artículos.</p>`;
                 document.getElementById('card-category').innerText = "BIENVENIDO";
-                document.getElementById('card-title').innerText = "Repositorio Académico ";
+                document.getElementById('card-title').innerText = "Repositorio Académico";
                 document.getElementById('card-subtitle').innerText = "Elige una asignatura arriba";
                 document.getElementById('card-text').innerText = "Bienvenido a tu plataforma de estudio. Haz clic en 'Arquitectura' o 'Calidad' en el menú de navegación superior para desplegar los apuntes cargados en tiempo real.";
                 document.getElementById('card-date').innerText = "Hoy";
@@ -200,7 +200,7 @@
             sidebarList.innerHTML = '';
 
             if (datosFiltrados.length === 0) {
-                sidebarList.innerHTML = `<p style="color: #8ca0b3; padding: 15px; font-size: 14px;">No hay artículos publicados en esta sección.</p>`;
+                sidebarList.innerHTML = `<p style="color: var(--text-gray); padding: 15px; font-size: 14px;">No hay artículos publicados en esta sección.</p>`;
                 document.getElementById('card-category').innerText = "VACÍO";
                 document.getElementById('card-title').innerText = "Próximamente";
                 document.getElementById('card-subtitle').innerText = "Sección en desarrollo";
@@ -263,7 +263,6 @@
             const contenedorBotones = document.getElementById('apunte-pagina-botones-pdf');
             contenedorBotones.innerHTML = '';
             
-            // MODIFICADO: Solo inyecta el HTML de los botones si pdf_url tiene texto real guardado
             if (data.pdf_url && data.pdf_url.trim() !== '') {
                 contenedorBotones.innerHTML = `
                     <div class="botones-pdf-container">
