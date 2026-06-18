@@ -21,6 +21,20 @@ export default async function handler(req, res) {
   const sql = neon(process.env.DATABASE_URL);
 
   try {
+
+    // Convertir fecha a formato YYYY-MM-DD
+    let fechaSQL = fecha;
+
+    if (fecha) {
+      const fechaConvertida = new Date(fecha);
+
+      if (!isNaN(fechaConvertida.getTime())) {
+        fechaSQL = fechaConvertida
+          .toISOString()
+          .split('T')[0];
+      }
+    }
+
     await sql`
       INSERT INTO apuntes (
         semana,
@@ -37,7 +51,7 @@ export default async function handler(req, res) {
         ${titulo},
         ${subtitulo},
         ${contenido},
-        ${fecha},
+        ${fechaSQL},
         ${categoria},
         ${seccion},
         ${pdf_url || null}
