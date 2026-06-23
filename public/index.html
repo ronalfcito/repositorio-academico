@@ -48,6 +48,22 @@
     </header>
 
     <main class="dashboard-container" id="sitio-principal">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-title">Semanas</span>
+                <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Mostrar u ocultar semanas">☰</button>
+            </div>
+            <div class="sidebar-dropdown" id="sidebar-dropdown" style="display: none;">
+                <select id="sidebar-select" onchange="seleccionarSemanaDesdeDropdown(event)">
+                    <option value="">Selecciona una semana</option>
+                </select>
+            </div>
+            <div id="sidebar-list">
+                <p style="color: var(--text-gray); padding: 15px; font-size: 14px;">Selecciona una materia en el menú superior para ver sus artículos.</p>
+            </div>
+            <div class="watermark-logo">YAVIRAC</div>
+        </aside>
+
         <section class="main-card" id="main-card">
             <span class="badge" id="card-category">BIENVENIDO</span>
             <h2 class="card-title" id="card-title">Repositorio Académico</h2>
@@ -63,13 +79,6 @@
                 </div>
             </div>
         </section>
-
-        <aside class="sidebar">
-            <div id="sidebar-list">
-                <p style="color: var(--text-gray); padding: 15px; font-size: 14px;">Selecciona una materia en el menú superior para ver sus artículos.</p>
-            </div>
-            <div class="watermark-logo">YAVIRAC</div>
-        </aside>
     </main>
 
     <div id="vista-apunte-completo" style="display: none;">
@@ -176,8 +185,13 @@
         function filtrarYMostrar(seccion) {
             seccionActual = seccion;
 
+            const sidebarDropdown = document.getElementById('sidebar-dropdown');
+            const sidebarSelect = document.getElementById('sidebar-select');
+
             if (seccion === 'inicio') {
                 document.getElementById('sidebar-list').innerHTML = `<p style="color: var(--text-gray); padding: 15px; font-size: 14px;">Selecciona una materia en el menú superior para ver sus artículos.</p>`;
+                if (sidebarDropdown) sidebarDropdown.style.display = 'none';
+                if (sidebarSelect) sidebarSelect.innerHTML = `<option value="">Selecciona una semana</option>`;
                 document.getElementById('card-category').innerText = "BIENVENIDO";
                 document.getElementById('card-title').innerText = "Repositorio Académico";
                 document.getElementById('card-subtitle').innerText = "Elige una asignatura arriba";
@@ -197,7 +211,22 @@
             });
 
             const sidebarList = document.getElementById('sidebar-list');
+            const sidebarDropdown = document.getElementById('sidebar-dropdown');
+            const sidebarSelect = document.getElementById('sidebar-select');
             sidebarList.innerHTML = '';
+
+            if (seccion === 'inicio') {
+                sidebarDropdown.style.display = 'none';
+                if (sidebarSelect) sidebarSelect.innerHTML = `<option value="">Selecciona una semana</option>`;
+            } else {
+                sidebarDropdown.style.display = 'block';
+                if (sidebarSelect) {
+                    sidebarSelect.innerHTML = `<option value="">Selecciona una semana</option>`;
+                    datosFiltrados.forEach((item, index) => {
+                        sidebarSelect.insertAdjacentHTML('beforeend', `<option value="${index}">${item.semana}: ${item.titulo}</option>`);
+                    });
+                }
+            }
 
             if (datosFiltrados.length === 0) {
                 sidebarList.innerHTML = `<p style="color: var(--text-gray); padding: 15px; font-size: 14px;">No hay artículos publicados en esta sección.</p>`;
@@ -230,6 +259,8 @@
             if(!data) return;
             
             articuloSeleccionadoIndex = indice;
+            const sidebarSelect = document.getElementById('sidebar-select');
+            if (sidebarSelect) sidebarSelect.value = indice;
             document.getElementById('card-category').innerText = data.categoria.toUpperCase();
             document.getElementById('card-title').innerText = `${data.semana}: ${data.titulo}`;
             document.getElementById('card-subtitle').innerText = data.subtitulo;
@@ -240,8 +271,25 @@
 
         function seleccionarArticulo(indice, evento) {
             document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-            evento.currentTarget.classList.add('active');
+            if (evento && evento.currentTarget) evento.currentTarget.classList.add('active');
+            const sidebarSelect = document.getElementById('sidebar-select');
+            if (sidebarSelect) sidebarSelect.value = indice;
             renderizarTarjeta(indice);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function seleccionarSemanaDesdeDropdown(event) {
+            const indice = Number(event.target.value);
+            if (!isNaN(indice) && datosFiltrados[indice]) {
+                const items = document.querySelectorAll('.sidebar-item');
+                items.forEach(item => item.classList.remove('active'));
+                if (items[indice]) items[indice].classList.add('active');
+                renderizarTarjeta(indice);
+            }
         }
 
         function cambiarSeccion(event, seccion, elementoNav) {

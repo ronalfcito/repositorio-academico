@@ -236,23 +236,23 @@ body::before {
    ========================================================================== */
 .dashboard-container {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 30px;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 28px;
     padding: 40px;
     flex-grow: 1;
-    align-items: flex-start;
+    align-items: start;
 }
 .main-card {
     background: white;          /* Cambiado a fondo blanco puro */
     border: none;               /* Eliminados bordes rígidos */
-    border-radius: 16px;
-    padding: 40px;
+    border-radius: 24px;
+    padding: 42px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 20px;
+    justify-content: flex-start;
+    gap: 24px;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Añadida sombra premium y limpia */
+    box-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
 }
 
 /* Badge de Bienvenida estilo píldora minimalista azul */
@@ -287,52 +287,112 @@ body::before {
 /* BARRA LATERAL (SIDEBAR INTEGRADO AL TEMA CLARO) */
 .sidebar {
     background: white;          /* Cambiado a fondo blanco puro */
-    border-radius: 16px;
+    border-radius: 24px;
     border: none;               /* Eliminado borde tosco */
-    padding: 20px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 18px;
     position: relative;
-    overflow: hidden; 
+    overflow: hidden;
     flex-shrink: 0;
-    max-height: 80vh;
+    max-height: calc(100vh - 120px);
     overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Sombra consistente con la principal */
+    box-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+    min-width: 280px;
 }
 
-.sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-track { background: transparent; }
-.sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-.sidebar::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+.sidebar.collapsed {
+    min-width: 72px;
+    width: 72px;
+    padding: 18px 12px;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.sidebar-toggle {
+    border: none;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.sidebar-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-dropdown select {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    padding: 12px 14px;
+    background: #f8fafc;
+    color: #1e293b;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.sidebar.collapsed .sidebar-dropdown,
+.sidebar.collapsed #sidebar-list,
+.sidebar.collapsed .watermark-logo {
+    display: none;
+}
 
 .sidebar-item {
-    padding: 15px;
-    border-radius: 8px;
+    padding: 16px;
+    border-radius: 16px;
     cursor: pointer;
-    border-bottom: 1px solid #f1f5f9; /* Suavizado a línea divisoria clara */
-    transition: background 0.2s;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.2s, transform 0.2s;
     position: relative;
-    z-index: 1; 
+    z-index: 1;
 }
-.sidebar-item:hover { background-color: #f8fafc; }
-.sidebar-item.active { 
-    background-color: rgba(37, 99, 235, 0.05); /* Cambiado a base azul */
+.sidebar-item:hover {
+    background-color: #f8fafc;
+    transform: translateX(2px);
+}
+.sidebar-item.active {
+    background-color: rgba(37, 99, 235, 0.08);
     border-left: 4px solid var(--accent-green);
 }
-.sidebar-item h3 { font-size: 15px; margin: 0 0 5px 0; color: #1e293b; }
-.sidebar-item p { font-size: 13px; margin: 0; color: var(--text-gray); }
+.sidebar-item h3 {
+    font-size: 14px;
+    margin: 0 0 8px 0;
+    color: #1e293b;
+}
+.sidebar-item p {
+    font-size: 13px;
+    margin: 0;
+    color: var(--text-gray);
+}
 
 /* Marca de agua adaptada con opacidad baja para fondos claros */
 .watermark-logo {
     position: absolute;
-    bottom: 20px; 
-    right: -20px;     
-    font-size: 75px; 
-    font-weight: 900; 
-    color: rgba(0, 0, 0, 0.02); /* Opacidad ultra baja perfecta para fondo claro */
+    bottom: 20px;
+    left: 24px;
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(15, 23, 42, 0.03);
     letter-spacing: 2px;
-    z-index: 0; 
+    z-index: 0;
     pointer-events: none;
     user-select: none;
 }
@@ -464,11 +524,35 @@ pre, code {
    RESPONSIVE DESIGN (SOPORTE PARA MÓVILES)
    ========================================================================== */
 @media (max-width: 900px) {
-    .dashboard-container { grid-template-columns: 1fr; }
-    .navbar { padding: 15px 20px; flex-direction: column; gap: 15px; text-align: center; }
+    .dashboard-container {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+    .navbar {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    .sidebar {
+        min-width: auto;
+        width: 100%;
+        max-height: none;
+        padding: 20px;
+    }
+    .sidebar.collapsed {
+        width: 100%;
+        min-width: auto;
+    }
+    .sidebar-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .sidebar-toggle {
+        width: 100%;
+    }
     .grid-form { grid-template-columns: 1fr; }
     .col-span-2 { grid-column: span 1; }
-    .sidebar { max-height: none; }
     .meta-y-acciones { flex-direction: column; align-items: flex-start; gap: 12px; }
     .botones-pdf-container { width: 100%; }
     .btn-pdf-action { flex-grow: 1; justify-content: center; }
