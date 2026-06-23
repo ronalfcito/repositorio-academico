@@ -377,6 +377,19 @@ body::before {
     margin: 0 0 8px 0;
     color: #1e293b;
 }
+
+.sidebar-item h3 { font-size: 16px; }
+
+.sidebar-badge {
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+.sidebar-badge.teoria { background: #10b981; }
+.sidebar-badge.practica { background: #f59e0b; }
 .sidebar-item p {
     font-size: 13px;
     margin: 0;
@@ -433,6 +446,11 @@ body::before {
 .apunte-parrafo { font-size: 15px; line-height: 1.7; color: #334155; margin-bottom: 20px; }
 .apunte-subtitulo-h3 { font-size: 20px; color: var(--accent-green); margin: 30px 0 15px 0; font-weight: 600; }
 .apunte-item-lista { font-size: 15px; color: #334155; margin-left: 20px; margin-bottom: 10px; list-style-type: square; }
+
+.apunte-lista { margin: 12px 0 18px 20px; padding-left: 18px; }
+
+/* Allow full visibility of content blocks */
+.contenido-pagina-apunte { overflow: visible; }
 
 pre, code {
     background-color: #f8fafc;  /* Cambiado a bloque de código claro */
