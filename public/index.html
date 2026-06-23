@@ -211,21 +211,14 @@
             });
 
             const sidebarList = document.getElementById('sidebar-list');
-            const sidebarDropdown = document.getElementById('sidebar-dropdown');
-            const sidebarSelect = document.getElementById('sidebar-select');
             sidebarList.innerHTML = '';
 
-            if (seccion === 'inicio') {
-                sidebarDropdown.style.display = 'none';
-                if (sidebarSelect) sidebarSelect.innerHTML = `<option value="">Selecciona una semana</option>`;
-            } else {
-                sidebarDropdown.style.display = 'block';
-                if (sidebarSelect) {
-                    sidebarSelect.innerHTML = `<option value="">Selecciona una semana</option>`;
-                    datosFiltrados.forEach((item, index) => {
-                        sidebarSelect.insertAdjacentHTML('beforeend', `<option value="${index}">${item.semana}: ${item.titulo}</option>`);
-                    });
-                }
+            sidebarDropdown.style.display = 'block';
+            if (sidebarSelect) {
+                sidebarSelect.innerHTML = `<option value="">Selecciona una semana</option>`;
+                datosFiltrados.forEach((item, index) => {
+                    sidebarSelect.insertAdjacentHTML('beforeend', `<option value="${index}">${item.semana}: ${item.titulo}</option>`);
+                });
             }
 
             if (datosFiltrados.length === 0) {
