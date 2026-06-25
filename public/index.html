@@ -165,9 +165,23 @@
 
                 <div class="form-group col-span-2">
                     <label>Desarrollo del Contenido Académico</label>
-                    <div class="button-row gap-10 editor-toolbar">
-                        <button type="button" class="btn-regresar btn-small-padding" onclick="insertarSubtema(3)">Subtema normal</button>
-                        <button type="button" class="btn-regresar btn-small-padding" onclick="insertarSubtema(4)">Subtema grande</button>
+                    <div class="editor-toolbar">
+                        <label for="editor-format" class="editor-toolbar-label">Formato:</label>
+                        <select id="editor-format" class="editor-format-select" onchange="aplicarFormatoTexto(this.value)">
+                            <option value="normal">Texto normal</option>
+                            <option value="subtema">Subtema</option>
+                            <option value="subtitulo">Subtítulo</option>
+                            <option value="titulo">Título</option>
+                        </select>
+                        <label for="editor-size" class="editor-toolbar-label">Tamaño:</label>
+                        <select id="editor-size" class="editor-format-select" onchange="aplicarTamañoTexto(this.value)">
+                            <option value="">Auto</option>
+                            <option value="18">18px</option>
+                            <option value="20">20px</option>
+                            <option value="24">24px</option>
+                            <option value="28">28px</option>
+                            <option value="32">32px</option>
+                        </select>
                         <button type="button" class="btn-regresar btn-small-padding" onclick="insertarParrafo()">Nueva línea</button>
                     </div>
                     <textarea id="pub-contenido" rows="10" placeholder="Escribe el cuerpo completo aquí... Recuerda que puedes usar '|' para generar cuadros tabulares automáticamente." required></textarea>
@@ -548,18 +562,40 @@
             mostrarPaginaPublicar();
         }
 
-        function insertarSubtema(nivel) {
+        function aplicarFormatoTexto(formato) {
             const textarea = document.getElementById('pub-contenido');
-            const marcador = nivel === 4 ? '#### ' : '### ';
+            const valor = textarea.value;
             const inicio = textarea.selectionStart;
             const fin = textarea.selectionEnd;
+            const lineaInicio = valor.lastIndexOf('\n', inicio - 1) + 1;
+            const lineaFin = valor.indexOf('\n', fin) === -1 ? valor.length : valor.indexOf('\n', fin);
+            const marcador = formato === 'titulo' ? '#### ' : formato === 'subtitulo' ? '### ' : formato === 'subtema' ? '## ' : '';
+
+            const lineaActual = valor.substring(lineaInicio, lineaFin);
+            const lineaSinHashes = lineaActual.replace(/^#{1,6}\s*/, '');
+            const nuevaLinea = marcador ? `${marcador}${lineaSinHashes}` : lineaSinHashes;
+            textarea.value = `${valor.substring(0, lineaInicio)}${nuevaLinea}${valor.substring(lineaFin)}`;
+            textarea.focus();
+            const posicion = lineaInicio + nuevaLinea.length;
+            textarea.setSelectionRange(posicion, posicion);
+        }
+
+        function aplicarTamañoTexto(tamaño) {
+            const textarea = document.getElementById('pub-contenido');
+            const inicio = textarea.selectionStart;
+            const fin = textarea.selectionEnd;
+            if (inicio === fin) {
+                alert('Selecciona el texto que quieres cambiar de tamaño.');
+                return;
+            }
             const valor = textarea.value;
             const antes = valor.substring(0, inicio);
+            const seleccionado = valor.substring(inicio, fin);
             const despues = valor.substring(fin);
-            textarea.value = `${antes}${marcador}${despues}`;
+            const nuevoTexto = tamaño ? `<span style="font-size:${tamaño}px;">${seleccionado}</span>` : seleccionado;
+            textarea.value = `${antes}${nuevoTexto}${despues}`;
             textarea.focus();
-            const posicion = antes.length + marcador.length;
-            textarea.setSelectionRange(posicion, posicion);
+            textarea.setSelectionRange(inicio, inicio + nuevoTexto.length);
         }
 
         function insertarParrafo() {
