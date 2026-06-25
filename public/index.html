@@ -329,7 +329,7 @@
             const contenedorBotones = document.getElementById('apunte-pagina-botones-pdf');
             contenedorBotones.innerHTML = '';
             
-                if (data.pdf_url && data.pdf_url.trim() !== '') {
+            if (data.pdf_url && data.pdf_url.trim() !== '') {
                 contenedorBotones.innerHTML = `
                     <div class="botones-pdf-container">
                         <a href="${data.pdf_url}" target="_blank" rel="noopener noreferrer" class="btn-pdf-action btn-visualizar">👁️ Ver PDF</a>
@@ -339,66 +339,79 @@
             }
 
             const cuerpoApunte = document.getElementById('apunte-pagina-cuerpo');
-            
-            // Si el contenido contiene cuadros, mostrar directamente (sin procesar líneas)
-            if (data.contenido.includes('<table class="tabla-datos">') || data.contenido.includes('<div class="contenedor-cuadro-academico">')) {
-                cuerpoApunte.innerHTML = data.contenido;
-                document.getElementById('sitio-principal').style.display = 'none';
-                document.getElementById('vista-publicar-completo').style.display = 'none';
-                document.getElementById('vista-apunte-completo').style.display = 'block';
-                actualizarInterfazUsuario();
-                window.scrollTo(0, 0);
-                return;
-            }
-
-            let lineas = data.contenido.split('\n');
-            let htmlFinal = "";
-            let enTabla = false;
-            let enLista = false;
-
-            lineas.forEach(linea => {
-                let limpia = linea.trim();
-
-                if (limpia.includes('|')) {
-                    if (enLista) { htmlFinal += `</ul>`; enLista = false; }
-                    if (!enTabla) {
-                        htmlFinal += `<div class="contenedor-cuadro-academico"><table class="tabla-datos"><thead>`;
-                        let celdas = limpia.split('|');
-                        htmlFinal += `<tr>${celdas.map(c => `<th>${c.trim()}</th>`).join('')}</tr></thead><tbody>`;
-                        enTabla = true;
-                    } else {
-                        let celdas = limpia.split('|');
-                        htmlFinal += `<tr>${celdas.map(c => `<td>${c.trim()}</td>`).join('')}</tr>`;
-                    }
-                } else {
-                    if (enTabla) {
-                        htmlFinal += `</tbody></table></div>`;
-                        enTabla = false;
-                    }
-                    if (limpia !== "") {
-                        if (limpia.startsWith('###')) {
-                            if (enLista) { htmlFinal += `</ul>`; enLista = false; }
-                            htmlFinal += `<h3 class="apunte-subtitulo-h3">${limpia.replace('###', '')}</h3>`;
-                        } else if (limpia.startsWith('-') || limpia.startsWith('*')) {
-                            if (!enLista) { htmlFinal += `<ul class="apunte-lista">`; enLista = true; }
-                            htmlFinal += `<li class="apunte-item-lista">${limpia.substring(1).trim()}</li>`;
-                        } else {
-                            if (enLista) { htmlFinal += `</ul>`; enLista = false; }
-                            htmlFinal += `<p class="apunte-parrafo">${limpia}</p>`;
-                        }
-                    }
-                }
-            });
-
-            if (enTabla) htmlFinal += `</tbody></table></div>`;
-            if (enLista) htmlFinal += `</ul>`;
-            cuerpoApunte.innerHTML = htmlFinal;
+            cuerpoApunte.innerHTML = generarHtmlDesdeContenidoMixto(data.contenido);
 
             document.getElementById('sitio-principal').style.display = 'none';
             document.getElementById('vista-publicar-completo').style.display = 'none';
             document.getElementById('vista-apunte-completo').style.display = 'block';
             actualizarInterfazUsuario();
             window.scrollTo(0, 0);
+        }
+
+        function generarHtmlDesdeContenidoMixto(contenido) {
+            if (!contenido) return '';
+
+            const segmentos = contenido.split(/(<div class="contenedor-cuadro-academico">[\s\S]*?<\/div>)/gi);
+            let html = '';
+
+            segmentos.forEach(segmento => {
+                if (segmento.trim() === '') return;
+                if (segmento.match(/^<div class="contenedor-cuadro-academico">[\s\S]*?<\/div>$/i)) {
+                    html += segmento;
+                } else {
+                    html += procesarSegmentoTextoPlano(segmento);
+                }
+            });
+
+            return html;
+        }
+
+        function procesarSegmentoTextoPlano(texto) {
+            const lineas = texto.split('\n');
+            let html = '';
+            let enTabla = false;
+            let enLista = false;
+
+            lineas.forEach(linea => {
+                const limpia = linea.trim();
+
+                if (limpia.includes('|')) {
+                    if (enLista) { html += `</ul>`; enLista = false; }
+                    if (!enTabla) {
+                        html += `<div class="contenedor-cuadro-academico"><table class="tabla-datos"><thead>`;
+                        const celdas = limpia.split('|');
+                        html += `<tr>${celdas.map(c => `<th>${c.trim()}</th>`).join('')}</tr></thead><tbody>`;
+                        enTabla = true;
+                    } else {
+                        const celdas = limpia.split('|');
+                        html += `<tr>${celdas.map(c => `<td>${c.trim()}</td>`).join('')}</tr>`;
+                    }
+                } else {
+                    if (enTabla) {
+                        html += `</tbody></table></div>`;
+                        enTabla = false;
+                    }
+
+                    if (limpia !== "") {
+                        if (limpia.startsWith('###')) {
+                            if (enLista) { html += `</ul>`; enLista = false; }
+                            html += `<h3 class="apunte-subtitulo-h3">${limpia.replace('###', '')}</h3>`;
+                        } else if (limpia.startsWith('-') || limpia.startsWith('*')) {
+                            if (!enLista) { html += `<ul class="apunte-lista">`; enLista = true; }
+                            html += `<li class="apunte-item-lista">${limpia.substring(1).trim()}</li>`;
+                        } else {
+                            if (enLista) { html += `</ul>`; enLista = false; }
+                            html += `<p class="apunte-parrafo">${limpia}</p>`;
+                        }
+                    } else {
+                        if (enLista) { html += `</ul>`; enLista = false; }
+                    }
+                }
+            });
+
+            if (enTabla) html += `</tbody></table></div>`;
+            if (enLista) html += `</ul>`;
+            return html;
         }
 
         function mostrarPaginaPublicar() {
@@ -669,7 +682,8 @@
             cuadroHTML += `</tbody></table></div>`;
 
             const contenido = document.getElementById('pub-contenido');
-            contenido.value += '\n' + cuadroHTML + '\n';
+            const separador = contenido.value.trim() !== '' ? '\n\n' : '';
+            contenido.value = contenido.value + separador + cuadroHTML + '\n\n';
 
             eliminarCuadro();
             alert('✓ Cuadro insertado en el contenido');
