@@ -535,7 +535,7 @@ body::before {
 }
 
 .hidden {
-    display: none !important;
+    display: none;
 }
 
 .editor-toolbar {

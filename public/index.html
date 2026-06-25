@@ -229,7 +229,9 @@
                 document.getElementById('card-subtitle').innerText = "Elige una asignatura arriba";
                 document.getElementById('card-text').innerText = "Bienvenido a tu plataforma de estudio. Haz clic en 'Arquitectura' o 'Calidad' en el menú de navegación superior para desplegar los apuntes cargados en tiempo real.";
                 document.getElementById('card-date').innerText = "Hoy";
-                document.getElementById('btn-consultar-trigger').style.display = 'none';
+                const btnConsultarTrigger = document.getElementById('btn-consultar-trigger');
+                btnConsultarTrigger.style.display = 'none';
+                btnConsultarTrigger.classList.add('hidden');
                 actualizarInterfazUsuario(); 
                 return;
             }
@@ -262,13 +264,16 @@
                 document.getElementById('card-title').innerText = "Próximamente";
                 document.getElementById('card-subtitle').innerText = "Sección en desarrollo";
                 document.getElementById('card-text').innerText = "Aún no se han registrado artículos para esta sección en Neon Console.";
-                document.getElementById('card-date').innerText = "--";
-                document.getElementById('btn-consultar-trigger').style.display = 'none';
+                const btnConsultarTrigger = document.getElementById('btn-consultar-trigger');
+                btnConsultarTrigger.style.display = 'none';
+                btnConsultarTrigger.classList.add('hidden');
                 actualizarInterfazUsuario();
                 return;
             }
 
-            document.getElementById('btn-consultar-trigger').style.display = 'block';
+            const btnConsultarTrigger = document.getElementById('btn-consultar-trigger');
+            btnConsultarTrigger.style.display = 'block';
+            btnConsultarTrigger.classList.remove('hidden');
 
             datosFiltrados.forEach((item, indice) => {
                 const categoria = (item.categoria || '').toUpperCase();
