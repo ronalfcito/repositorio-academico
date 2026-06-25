@@ -151,6 +151,18 @@
                 </div>
 
                 <div class="form-group col-span-2">
+                    <label>Cuadro Comparativo (Opcional)</label>
+                    <div class="seccion-cuadro-comparativo">
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                            <input type="number" id="pub-num-columnas" min="2" max="6" value="2" placeholder="Columnas" style="width: 100px;">
+                            <input type="number" id="pub-num-filas" min="1" max="20" value="1" placeholder="Filas" style="width: 100px;">
+                            <button type="button" onclick="generarCuadroVacio()" class="btn-regresar" style="padding: 8px 16px;">+ Crear Cuadro</button>
+                        </div>
+                        <div id="cuadro-comparativo-contenedor"></div>
+                    </div>
+                </div>
+
+                <div class="form-group col-span-2">
                     <label>Desarrollo del Contenido Académico</label>
                     <textarea id="pub-contenido" rows="10" placeholder="Escribe el cuerpo completo aquí... Recuerda que puedes usar '|' para generar cuadros tabulares automáticamente." required></textarea>
                 </div>
@@ -327,6 +339,18 @@
             }
 
             const cuerpoApunte = document.getElementById('apunte-pagina-cuerpo');
+            
+            // Si el contenido contiene cuadros, mostrar directamente (sin procesar líneas)
+            if (data.contenido.includes('<table class="tabla-datos">') || data.contenido.includes('<div class="contenedor-cuadro-academico">')) {
+                cuerpoApunte.innerHTML = data.contenido;
+                document.getElementById('sitio-principal').style.display = 'none';
+                document.getElementById('vista-publicar-completo').style.display = 'none';
+                document.getElementById('vista-apunte-completo').style.display = 'block';
+                actualizarInterfazUsuario();
+                window.scrollTo(0, 0);
+                return;
+            }
+
             let lineas = data.contenido.split('\n');
             let htmlFinal = "";
             let enTabla = false;
@@ -562,6 +586,99 @@
 
         window.onclick = function() {
             document.getElementById('dropdown-menu').style.display = 'none';
+        }
+
+        // =========== FUNCIONES PARA CUADRO COMPARATIVO ===========
+        let cuadroComparativoActual = null;
+
+        function generarCuadroVacio() {
+            const numColumnas = parseInt(document.getElementById('pub-num-columnas').value) || 2;
+            const numFilas = parseInt(document.getElementById('pub-num-filas').value) || 1;
+
+            if (numColumnas < 2 || numColumnas > 6) {
+                alert('Las columnas deben estar entre 2 y 6');
+                return;
+            }
+
+            let html = `<table class="cuadro-comparativo-tabla"><thead><tr>`;
+            
+            // Encabezados
+            for (let i = 0; i < numColumnas; i++) {
+                html += `<th><input type="text" class="cuadro-input-celda" placeholder="Encabezado ${i + 1}"></th>`;
+            }
+            html += `</tr></thead><tbody>`;
+
+            // Filas de datos
+            for (let f = 0; f < numFilas; f++) {
+                html += `<tr>`;
+                for (let c = 0; c < numColumnas; c++) {
+                    html += `<td><input type="text" class="cuadro-input-celda" placeholder="Dato"></td>`;
+                }
+                html += `</tr>`;
+            }
+
+            html += `</tbody></table>`;
+            html += `<div style="margin-top: 12px; display: flex; gap: 8px;">
+                        <button type="button" onclick="agregarFilaCuadro()" class="btn-agregar-fila">+ Agregar Fila</button>
+                        <button type="button" onclick="guardarCuadroEnContenido()" class="btn-regresar" style="padding: 8px 14px;">✓ Insertar en Contenido</button>
+                        <button type="button" onclick="eliminarCuadro()" class="btn-eliminar-cuadro">✕ Descartar</button>
+                    </div>`;
+
+            document.getElementById('cuadro-comparativo-contenedor').innerHTML = html;
+        }
+
+        function agregarFilaCuadro() {
+            const tabla = document.querySelector('.cuadro-comparativo-tabla');
+            if (!tabla) return;
+
+            const numColumnas = tabla.querySelector('thead tr').children.length;
+            const tbody = tabla.querySelector('tbody');
+            const fila = tbody.insertRow();
+
+            for (let c = 0; c < numColumnas; c++) {
+                const celda = fila.insertCell(c);
+                celda.innerHTML = `<input type="text" class="cuadro-input-celda" placeholder="Dato">`;
+            }
+        }
+
+        function guardarCuadroEnContenido() {
+            const tabla = document.querySelector('.cuadro-comparativo-tabla');
+            if (!tabla) {
+                alert('Crea un cuadro primero');
+                return;
+            }
+
+            // Recolectar datos de la tabla
+            let cuadroHTML = `<div class="contenedor-cuadro-academico"><table class="tabla-datos"><thead><tr>`;
+            
+            // Encabezados
+            tabla.querySelectorAll('thead th input').forEach(input => {
+                cuadroHTML += `<th>${input.value || 'Sin título'}</th>`;
+            });
+            cuadroHTML += `</tr></thead><tbody>`;
+
+            // Datos
+            tabla.querySelectorAll('tbody tr').forEach(fila => {
+                cuadroHTML += `<tr>`;
+                fila.querySelectorAll('td input').forEach(input => {
+                    cuadroHTML += `<td>${input.value || '-'}</td>`;
+                });
+                cuadroHTML += `</tr>`;
+            });
+
+            cuadroHTML += `</tbody></table></div>`;
+
+            const contenido = document.getElementById('pub-contenido');
+            contenido.value += '\n' + cuadroHTML + '\n';
+
+            eliminarCuadro();
+            alert('✓ Cuadro insertado en el contenido');
+        }
+
+        function eliminarCuadro() {
+            document.getElementById('cuadro-comparativo-contenedor').innerHTML = '';
+            document.getElementById('pub-num-columnas').value = '2';
+            document.getElementById('pub-num-filas').value = '1';
         }
 
         cargarDatos();
