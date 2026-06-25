@@ -598,6 +598,7 @@ body::before {
     letter-spacing: 2px;
     z-index: 0;
     pointer-events: none;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -661,10 +662,12 @@ body::before {
     margin-bottom: 20px; 
 }
 .apunte-subtitulo-h3 { 
-    font-size: 22px; 
+    font-size: 26px; 
     color: #2563eb; 
-    margin: 30px 0 15px 0; 
-    font-weight: 700;
+    margin: 34px 0 18px 0; 
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    line-height: 1.2;
     padding-bottom: 10px;
     border-bottom: 2px solid rgba(37, 99, 235, 0.2);
 }
