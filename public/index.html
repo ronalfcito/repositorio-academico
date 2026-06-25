@@ -165,6 +165,11 @@
 
                 <div class="form-group col-span-2">
                     <label>Desarrollo del Contenido Académico</label>
+                    <div class="button-row gap-10 editor-toolbar">
+                        <button type="button" class="btn-regresar btn-small-padding" onclick="insertarSubtema(3)">Subtema normal</button>
+                        <button type="button" class="btn-regresar btn-small-padding" onclick="insertarSubtema(4)">Subtema grande</button>
+                        <button type="button" class="btn-regresar btn-small-padding" onclick="insertarParrafo()">Nueva línea</button>
+                    </div>
                     <textarea id="pub-contenido" rows="10" placeholder="Escribe el cuerpo completo aquí... Recuerda que puedes usar '|' para generar cuadros tabulares automáticamente." required></textarea>
                 </div>
 
@@ -394,7 +399,10 @@
                     }
 
                     if (limpia !== "") {
-                        if (limpia.startsWith('###')) {
+                        if (limpia.startsWith('####')) {
+                            if (enLista) { html += `</ul>`; enLista = false; }
+                            html += `<h3 class="apunte-subtitulo-h3 grande">${limpia.replace('####', '')}</h3>`;
+                        } else if (limpia.startsWith('###')) {
                             if (enLista) { html += `</ul>`; enLista = false; }
                             html += `<h3 class="apunte-subtitulo-h3">${limpia.replace('###', '')}</h3>`;
                         } else if (limpia.startsWith('-') || limpia.startsWith('*')) {
@@ -538,6 +546,34 @@
             document.getElementById('pub-pdf-url').value = '';
             
             mostrarPaginaPublicar();
+        }
+
+        function insertarSubtema(nivel) {
+            const textarea = document.getElementById('pub-contenido');
+            const marcador = nivel === 4 ? '#### ' : '### ';
+            const inicio = textarea.selectionStart;
+            const fin = textarea.selectionEnd;
+            const valor = textarea.value;
+            const antes = valor.substring(0, inicio);
+            const despues = valor.substring(fin);
+            textarea.value = `${antes}${marcador}${despues}`;
+            textarea.focus();
+            const posicion = antes.length + marcador.length;
+            textarea.setSelectionRange(posicion, posicion);
+        }
+
+        function insertarParrafo() {
+            const textarea = document.getElementById('pub-contenido');
+            const inicio = textarea.selectionStart;
+            const fin = textarea.selectionEnd;
+            const valor = textarea.value;
+            const antes = valor.substring(0, inicio);
+            const despues = valor.substring(fin);
+            const salto = antes.endsWith('\n') ? '\n' : '\n\n';
+            textarea.value = `${antes}${salto}${despues}`;
+            textarea.focus();
+            const posicion = antes.length + salto.length;
+            textarea.setSelectionRange(posicion, posicion);
         }
 
         async function eliminarArticuloActual() {
