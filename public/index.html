@@ -297,9 +297,13 @@
             document.getElementById('card-category').innerText = data.categoria.toUpperCase();
             document.getElementById('card-title').innerText = `${data.semana}: ${data.titulo}`;
             document.getElementById('card-subtitle').innerText = data.subtitulo;
-            document.getElementById('card-text').innerText = data.contenido.substring(0, 140) + "... (clic en consultar para ver completo)";
+            document.getElementById('card-text').innerText = stripHtmlTags(data.contenido).substring(0, 140) + "... (clic en consultar para ver completo)";
             document.getElementById('card-date').innerText = data.fecha;
             actualizarInterfazUsuario();
+        }
+
+        function stripHtmlTags(texto) {
+            return texto.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
         }
 
         function seleccionarArticulo(indice, evento) {
@@ -394,6 +398,13 @@
 
             lineas.forEach(linea => {
                 const limpia = linea.trim();
+
+                if (limpia.startsWith('<') && /^(<div|<h[1-6]|<span|<p|<ul|<ol|<li|<table|<tr|<td|<th)/i.test(limpia)) {
+                    if (enLista) { html += `</ul>`; enLista = false; }
+                    if (enTabla) { html += `</tbody></table></div>`; enTabla = false; }
+                    html += limpia;
+                    return;
+                }
 
                 if (limpia.includes('|')) {
                     if (enLista) { html += `</ul>`; enLista = false; }
@@ -569,11 +580,18 @@
             const fin = textarea.selectionEnd;
             const lineaInicio = valor.lastIndexOf('\n', inicio - 1) + 1;
             const lineaFin = valor.indexOf('\n', fin) === -1 ? valor.length : valor.indexOf('\n', fin);
-            const marcador = formato === 'titulo' ? '#### ' : formato === 'subtitulo' ? '### ' : formato === 'subtema' ? '## ' : '';
+            const lineaActual = valor.substring(lineaInicio, lineaFin).trim();
+            const textoLimpio = lineaActual.replace(/^<h[1-6][^>]*>/i, '').replace(/<\/h[1-6]>$/i, '').trim();
+            let nuevaLinea = textoLimpio;
 
-            const lineaActual = valor.substring(lineaInicio, lineaFin);
-            const lineaSinHashes = lineaActual.replace(/^#{1,6}\s*/, '');
-            const nuevaLinea = marcador ? `${marcador}${lineaSinHashes}` : lineaSinHashes;
+            if (formato === 'titulo') {
+                nuevaLinea = `<h2 class="apunte-subtitulo-h3 grande">${textoLimpio}</h2>`;
+            } else if (formato === 'subtitulo') {
+                nuevaLinea = `<h3 class="apunte-subtitulo-h3">${textoLimpio}</h3>`;
+            } else if (formato === 'subtema') {
+                nuevaLinea = `<h4 class="apunte-subtitulo-h3">${textoLimpio}</h4>`;
+            }
+
             textarea.value = `${valor.substring(0, lineaInicio)}${nuevaLinea}${valor.substring(lineaFin)}`;
             textarea.focus();
             const posicion = lineaInicio + nuevaLinea.length;

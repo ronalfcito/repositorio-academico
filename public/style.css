@@ -531,11 +531,15 @@ body::before {
     flex-wrap: wrap;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .editor-toolbar {
-    margin-bottom: 10px;
+    margin-bottom: 18px;
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 24px;
     align-items: center;
 }
 
@@ -543,16 +547,17 @@ body::before {
     font-size: 14px;
     color: #334155;
     font-weight: 600;
+    margin-right: 6px;
 }
 
 .editor-format-select {
-    padding: 8px 12px;
-    border-radius: 10px;
+    padding: 10px 16px;
+    border-radius: 12px;
     border: 1px solid #cbd5e1;
     background: #ffffff;
     color: #0f172a;
     font-size: 14px;
-    min-width: 140px;
+    min-width: 180px;
 }
 
 .btn-small-padding {
