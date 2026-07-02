@@ -77,6 +77,8 @@ body::before {
     padding: 15px 40px;
     border-bottom: 2px solid rgba(37, 99, 235, 0.1);
     box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 2000;
 }
 .logo { display: flex; align-items: center; gap: 10px; }
 .logo-sub { font-size: 11px; color: var(--text-gray); margin: 0; }
@@ -137,21 +139,22 @@ body::before {
     padding: 8px 15px;
     border-radius: 12px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: visible;
 }
 .user-profile:hover {
     background: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%);
     transform: scale(1.05);
 }
 .avatar { 
-    width: 40px; 
-    height: 40px; 
+    width: 34px; 
+    height: 34px; 
     border-radius: 50%; 
     object-fit: cover;
-    border: 3px solid #2563eb;
+    border: 2px solid #2563eb;
     transition: transform 0.3s;
 }
 .user-profile:hover .avatar {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 .arrow { 
     font-size: 11px; 
@@ -162,8 +165,8 @@ body::before {
     transform: rotate(180deg);
 }
 .notification { 
-    font-size: 18px; 
-    margin-left: 5px; 
+    font-size: 14px; 
+    margin-left: 4px; 
     color: #f97316;
     animation: pulse 2s infinite;
 }
@@ -181,10 +184,11 @@ body::before {
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     border: 2px solid rgba(37, 99, 235, 0.2);
     border-radius: 16px;
+    min-width: 260px;
     width: 290px;
     padding: 18px;
     box-shadow: 0px 20px 40px rgba(37, 99, 235, 0.15);
-    z-index: 1000;
+    z-index: 3000;
     cursor: default;
     animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
