@@ -74,9 +74,9 @@
             <div class="card-footer">
                 <span class="date" id="card-date">Hoy</span>
                 <div class="button-row gap-10">
-                    <button id="btn-eliminar-dashboard" class="btn-regresar btn-cancelar hidden" onclick="eliminarArticuloActual()">🗑️ Eliminar</button>
-                    <button id="btn-editar-dashboard" class="btn-regresar hidden" onclick="cargarArticuloEnFormulario()">✏️ Editar</button>
-                    <button class="btn-consultar hidden" id="btn-consultar-trigger" onclick="mostrarPaginaApunte()">CONSULTAR APUNTE ➔</button>
+                    <button id="btn-eliminar-dashboard" class="btn-danger btn-small hidden" onclick="eliminarArticuloActual()">Eliminar</button>
+                    <button id="btn-editar-dashboard" class="btn-outline btn-small hidden" onclick="cargarArticuloEnFormulario()">Editar</button>
+                    <button class="btn-consultar hidden" id="btn-consultar-trigger" onclick="mostrarPaginaApunte()">Consultar apunte</button>
                 </div>
             </div>
         </section>
@@ -84,10 +84,10 @@
 
     <div id="vista-apunte-completo" class="hidden">
         <div class="header-acciones-apunte">
-            <button class="btn-regresar" onclick="regresarAlDashboard()">← VOLVER AL LISTADO</button>
+            <button class="btn-regresar btn-small" onclick="regresarAlDashboard()">← VOLVER AL LISTADO</button>
             <div class="button-row gap-10 align-center">
-                <button id="btn-eliminar-lectura" class="btn-regresar btn-cancelar hidden" onclick="eliminarArticuloActual()">🗑️ Eliminar Semana</button>
-                <button id="btn-editar-lectura" class="btn-regresar hidden btn-small-padding" onclick="cargarArticuloEnFormulario()">✏️ Editar Semana</button>
+                <button id="btn-eliminar-lectura" class="btn-danger btn-small hidden" onclick="eliminarArticuloActual()">Eliminar semana</button>
+                <button id="btn-editar-lectura" class="btn-outline btn-small hidden" onclick="cargarArticuloEnFormulario()">Editar semana</button>
                 <span class="badge" id="apunte-pagina-categoria">TEORÍA</span>
             </div>
         </div>
@@ -143,7 +143,11 @@
 
                 <div class="form-group">
                     <label>Categoría del Documento</label>
-                    <input type="text" id="pub-categoria" placeholder="Ej: TEORÍA / PRÁCTICA" required>
+                    <select id="pub-categoria" required>
+                        <option value="" disabled selected>Selecciona una categoría</option>
+                        <option value="TEORÍA">TEORÍA</option>
+                        <option value="PRÁCTICA">PRÁCTICA</option>
+                    </select>
                 </div>
 
                 <div class="form-group col-span-2">
