@@ -161,6 +161,12 @@
                 </div>
 
                 <div class="form-group col-span-2">
+                    <label>Imágenes del Artículo</label>
+                    <input type="file" id="pub-imagenes" accept="image/*" multiple>
+                    <span class="form-help">Selecciona una o varias imágenes para que se inserten en el contenido.</span>
+                </div>
+
+                <div class="form-group col-span-2">
                     <label>Cuadro Comparativo (Opcional)</label>
                     <div class="seccion-cuadro-comparativo">
                         <div class="flex-wrap gap-10" role="group">
@@ -418,7 +424,7 @@
             lineas.forEach(linea => {
                 const limpia = linea.trim();
 
-                if (limpia.startsWith('<') && /^(<div|<h[1-6]|<span|<p|<ul|<ol|<li|<table|<tr|<td|<th)/i.test(limpia)) {
+                if (limpia.startsWith('<') && /^(<div|<h[1-6]|<span|<p|<ul|<ol|<li|<table|<tr|<td|<th|<img)/i.test(limpia)) {
                     if (enLista) { html += `</ul>`; enLista = false; }
                     if (enTabla) { html += `</tbody></table></div>`; enTabla = false; }
                     html += limpia;
@@ -475,6 +481,15 @@
             window.scrollTo(0, 0);
         }
 
+        function fileToDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(reader.error);
+                reader.readAsDataURL(file);
+            });
+        }
+
         function regresarAlDashboard() {
             document.getElementById('vista-apunte-completo').style.display = 'none';
             document.getElementById('vista-publicar-completo').style.display = 'none';
@@ -515,13 +530,24 @@
             const hoy = new Date().toISOString().split('T')[0];
             const idEditar = document.getElementById('pub-id-editar').value;
 
+            const contenidoBase = document.getElementById('pub-contenido').value;
+            const imagenes = document.getElementById('pub-imagenes').files;
+            let contenidoFinal = contenidoBase;
+
+            if (imagenes && imagenes.length > 0) {
+                for (const archivo of imagenes) {
+                    const imagenDataUrl = await fileToDataUrl(archivo);
+                    contenidoFinal += `\n<img src="${imagenDataUrl}" alt="${archivo.name}" class="apunte-imagen">\n`;
+                }
+            }
+
             const datosArticulo = {
                 seccion: document.getElementById('pub-seccion').value,
                 semana: document.getElementById('pub-semana').value,
                 titulo: document.getElementById('pub-titulo').value,
                 subtitulo: document.getElementById('pub-subtitulo').value,
                 categoria: document.getElementById('pub-categoria').value,
-                contenido: document.getElementById('pub-contenido').value,
+                contenido: contenidoFinal,
                 pdf_url: document.getElementById('pub-pdf-url').value,
                 fecha: hoy
             };
@@ -550,6 +576,7 @@
                     document.getElementById('pub-subtitulo').value = '';
                     document.getElementById('pub-contenido').value = '';
                     document.getElementById('pub-pdf-url').value = '';
+                    document.getElementById('pub-imagenes').value = '';
                     regresarAlDashboard();
                     cargarDatos();
                 } else {
@@ -588,6 +615,7 @@
             document.getElementById('pub-categoria').value = '';
             document.getElementById('pub-contenido').value = '';
             document.getElementById('pub-pdf-url').value = '';
+            document.getElementById('pub-imagenes').value = '';
             
             mostrarPaginaPublicar();
         }
