@@ -533,6 +533,39 @@ body::before {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.sidebar-item {
+    padding: 18px;
+    margin-bottom: 16px;
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.sidebar-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.sidebar-item-title {
+    font-size: 15px;
+    margin: 0 0 10px 0;
+    color: #111827;
+    line-height: 1.3;
+}
+
+.sidebar-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.sidebar-badge {
+    display: inline-block;
+}
+
 .sidebar:hover {
     box-shadow: 0 20px 50px rgba(37, 99, 235, 0.15);
     border-color: rgba(37, 99, 235, 0.2);
@@ -653,33 +686,11 @@ body::before {
     display: none;
 }
 
-.sidebar-item {
-    padding: 16px;
-    border-radius: 14px;
-    cursor: pointer;
-    border-bottom: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    z-index: 1;
-    border-left: 4px solid transparent;
-}
-.sidebar-item:hover {
-    background: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%);
-    transform: translateX(4px);
-    border-left-color: #2563eb;
-}
 .sidebar-item.active {
     background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    border-left: 4px solid #2563eb;
+    border-color: rgba(37, 99, 235, 0.18);
     box-shadow: inset 0 2px 8px rgba(37, 99, 235, 0.1);
 }
-.sidebar-item h3 {
-    font-size: 14px;
-    margin: 0 0 8px 0;
-    color: #1e293b;
-}
-
-.sidebar-item h3 { font-size: 16px; }
 
 .sidebar-badge {
     font-size: 11px;
@@ -1125,4 +1136,35 @@ pre, code {
     .meta-y-acciones { flex-direction: column; align-items: flex-start; gap: 12px; }
     .botones-pdf-container { width: 100%; }
     .btn-pdf-action { flex-grow: 1; justify-content: center; }
+}
+
+.apunte-footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 36px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(37, 99, 235, 0.12);
+}
+
+.apunte-footer-actions .button-row {
+    gap: 10px;
+}
+
+.apunte-footer-actions .btn-regresar {
+    flex-shrink: 0;
+}
+
+.meta-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.meta-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }

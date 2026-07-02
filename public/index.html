@@ -83,25 +83,29 @@
     </main>
 
     <div id="vista-apunte-completo" class="hidden">
-        <div class="header-acciones-apunte">
-            <button class="btn-regresar btn-small" onclick="regresarAlDashboard()">← VOLVER AL LISTADO</button>
-            <div class="button-row gap-10 align-center">
-                <button id="btn-eliminar-lectura" class="btn-danger btn-small hidden" onclick="eliminarArticuloActual()">Eliminar semana</button>
-                <button id="btn-editar-lectura" class="btn-outline btn-small hidden" onclick="cargarArticuloEnFormulario()">Editar semana</button>
-                <span class="badge" id="apunte-pagina-categoria">TEORÍA</span>
-            </div>
-        </div>
-        
         <article class="contenido-pagina-apunte">
             <h1 id="apunte-pagina-titulo" class="apunte-gran-titulo">Cargando Título...</h1>
             
             <div class="meta-y-acciones">
-                <p id="apunte-pagina-fecha" class="apunte-gran-fecha">Cargando fecha...</p>
-                <div id="apunte-pagina-botones-pdf"></div>
+                <div class="meta-left">
+                    <p id="apunte-pagina-fecha" class="apunte-gran-fecha">Cargando fecha...</p>
+                </div>
+                <div class="meta-right">
+                    <span class="badge" id="apunte-pagina-categoria">TEORÍA</span>
+                    <div id="apunte-pagina-botones-pdf"></div>
+                </div>
             </div>
             
             <div class="divisor-apunte"></div>
             <div id="apunte-pagina-cuerpo"></div>
+            
+            <div class="apunte-footer-actions">
+                <button class="btn-regresar btn-small" onclick="regresarAlDashboard()">← VOLVER AL LISTADO</button>
+                <div class="button-row gap-10 align-center">
+                    <button id="btn-eliminar-lectura" class="btn-danger btn-small hidden" onclick="eliminarArticuloActual()">Eliminar semana</button>
+                    <button id="btn-editar-lectura" class="btn-outline btn-small hidden" onclick="cargarArticuloEnFormulario()">Editar semana</button>
+                </div>
+            </div>
         </article>
     </div>
 
@@ -147,6 +151,7 @@
                         <option value="" disabled selected>Selecciona una categoría</option>
                         <option value="TEORÍA">TEORÍA</option>
                         <option value="PRÁCTICA">PRÁCTICA</option>
+                        <option value="TEORÍA / PRÁCTICA">TEORÍA / PRÁCTICA</option>
                     </select>
                 </div>
 
@@ -281,12 +286,17 @@
 
             datosFiltrados.forEach((item, indice) => {
                 const categoria = (item.categoria || '').toUpperCase();
-                const tipoClass = ((item.categoria || '').toLowerCase().includes('pra')) ? 'practica' : 'teoria';
+                const categorias = categoria.split('/').map(c => c.trim()).filter(Boolean);
+                const badgesHtml = categorias.map(cat => {
+                    const lower = cat.toLowerCase();
+                    const tipoClass = lower.includes('pra') ? 'practica' : 'teoria';
+                    return `<span class="sidebar-badge ${tipoClass}">${cat}</span>`;
+                }).join('');
                 sidebarList.insertAdjacentHTML('beforeend', `
                     <div class="sidebar-item ${indice === 0 ? 'active' : ''}" onclick="seleccionarArticulo(${indice}, event)">
                         <div class="flex-row space-between align-center gap-12">
                             <h3 class="sidebar-item-title">${item.semana}: ${item.titulo}</h3>
-                            <span class="sidebar-badge ${tipoClass}">${categoria}</span>
+                            <div class="sidebar-badges">${badgesHtml}</div>
                         </div>
                         <p>${item.subtitulo}</p>
                     </div>
